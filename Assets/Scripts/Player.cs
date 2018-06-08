@@ -277,6 +277,8 @@ public class Player : MovingObject
         //Check if food point total is less than or equal to zero.
         if (food <= 0)
         {
+            Destroy(this);
+
             //Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
             SoundManager.instance.PlaySingle(gameOverSound);
 
