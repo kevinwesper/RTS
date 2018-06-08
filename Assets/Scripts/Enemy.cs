@@ -17,8 +17,9 @@ public class Enemy : MovingObject
 	private bool skipMove;                              //Boolean to determine whether or not enemy should skip a turn or move this turn.
 
     public float maxHealthPoints;
-    public static float currentHealthPoints;
+    public float currentHealthPoints;
     private Player player;
+
 
 
     void Awake()
@@ -26,6 +27,7 @@ public class Enemy : MovingObject
         maxHealthPoints = 100f;
         currentHealthPoints = maxHealthPoints;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        PointsTracker.i2++; 
     }
 
     //Start overrides the virtual Start function of the base class.
@@ -69,7 +71,10 @@ public class Enemy : MovingObject
     {
         if (currentHealthPoints < 1)
         {
+            Destroy(gameObject);
             gameObject.SetActive(false);
+            PointsTracker.i++;
+            
         }
     }
 
@@ -82,19 +87,21 @@ public class Enemy : MovingObject
 		//These values allow us to choose between the cardinal directions: up, down, left and right.
 		int xDir = 0;
 		int yDir = 0;
-        if (this != null) { 
-		//If the difference in positions is approximately zero (Epsilon) do the following:
+
+        if (this != null)
+        { 
+		    //If the difference in positions is approximately zero (Epsilon) do the following:
 		    if(Mathf.Abs (target.position.x - transform.position.x) < float.Epsilon)
 			
 			//If the y coordinate of the target's (player) position is greater than the y coordinate of this enemy's position set y direction 1 (to move up). If not, set it to -1 (to move down).
 			    yDir = target.position.y > transform.position.y ? 1 : -1;
 		
-		//If the difference in positions is not approximately zero (Epsilon) do the following:
+		    //If the difference in positions is not approximately zero (Epsilon) do the following:
 		    else
 			//Check if target x position is greater than enemy's x position, if so set x direction to 1 (move right), if not set to -1 (move left).
-			    xDir = target.position.x > transform.position.x ? 1 : -1;
+			xDir = target.position.x > transform.position.x ? 1 : -1;
 		
-		//Call the AttemptMove function and pass in the generic parameter Player, because Enemy is moving and expecting to potentially encounter a Player
+		    //Call the AttemptMove function and pass in the generic parameter Player, because Enemy is moving and expecting to potentially encounter a Player
 		    AttemptMove <Player> (xDir, yDir);
         }
 	}

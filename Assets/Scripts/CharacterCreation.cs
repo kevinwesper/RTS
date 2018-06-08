@@ -25,9 +25,9 @@ public class CharacterCreation : MonoBehaviour
         image = GetComponent<Image>();
         manager = GameObject.FindGameObjectWithTag("GameController").GetComponent<CharacterManager>();
 	}
-	
+
     // Saves the change of the sprite and animation to the manager.
-	void Update ()
+    void Update ()
     {
         // Checks if a change has been made (it's a bit overkill to do that every frame).
         if (change)
@@ -57,7 +57,7 @@ public class CharacterCreation : MonoBehaviour
             {
                 manager.pantsAnimation = spriteNumber;
             }
-
+            
             manager.ChangeVersion();
 
             change = false;

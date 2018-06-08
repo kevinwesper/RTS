@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Analytics;
 
 /// <summary>
 /// Manages the sprites & animation for the player character.
@@ -13,10 +14,24 @@ public class CharacterManager : MonoBehaviour
     // all animators for the character.
     Animator hairAnimator, faceAnimator, clothingAnimator, backpackAnimator, glovesAnimator, pantsAnimator;
 
+    AnalyticsResult result;
+    private Dictionary<string, object> parameters = new Dictionary<string, object>();
+    bool dataSent = false;
+    public bool sendData = false;
+
     void Awake()
     {
         ResetRenderers();
         ChangeVersion();
+    }
+
+    // Sends Data numbers;
+    private void Update()
+    {
+        if (!dataSent && sendData)
+        {
+            Dispatch();
+        }
     }
 
     // Finds the player and resets the animators.
@@ -54,4 +69,26 @@ public class CharacterManager : MonoBehaviour
         ChangeVersion();
     }
 
+    public bool Dispatch()
+    {
+        parameters["hair"] = hairAnimation;
+        parameters["face"] = faceAnimation;
+        parameters["hoodie"] = clothingAnimation;
+        parameters["backpack"] = backpackAnimation;
+        parameters["gloves"] = glovesAnimation;
+        parameters["pants"] = pantsAnimation;
+
+        result = AnalyticsEvent.Custom("Clothing style", parameters);
+
+        if (result == AnalyticsResult.Ok)
+        {
+            dataSent = true;
+            return true;
+        }
+        else
+        {
+            Debug.Log("Clothing Analytics Error");
+            return false;
+        }
+    }
 }

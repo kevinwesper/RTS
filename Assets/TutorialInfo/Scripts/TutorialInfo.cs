@@ -20,10 +20,13 @@ public class TutorialInfo : MonoBehaviour
 	// used to ensure that the launch screen isn't more than once per play session if the project reloads the main scene
 	private static bool alreadyShownThisSession = false;
 
+    CharacterManager manager;
 
 	void Awake()
 	{
-		if(alreadyShownThisSession)
+        manager = GameObject.FindGameObjectWithTag("GameController").GetComponent<CharacterManager>();
+
+        if (alreadyShownThisSession)
 		{
 			StartGame();
 		}
@@ -61,7 +64,8 @@ public class TutorialInfo : MonoBehaviour
 	// continue to play, by ensuring the preference is set correctly, the overlay is not active, 
 	// and that the audio listener is enabled, and time scale is 1 (normal)
 	public void StartGame()
-	{		
+	{
+        manager.sendData = true;
 		overlay.SetActive (false);
 		mainListener.enabled = true;
 		Time.timeScale = 1f;
